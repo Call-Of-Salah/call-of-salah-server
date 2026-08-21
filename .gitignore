@@ -1,0 +1,24 @@
+node_modules/
+dist/
+build/
+
+# Environment / secrets
+.env
+.env.*.local
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Prisma
+prisma/migrations/dev.db
+
+# Testing
+coverage/
+
+# Docker (keep the Dockerfile itself, just ignore local overrides)
+docker-compose.override.yml
+
+# macOS
+.DS_Store
