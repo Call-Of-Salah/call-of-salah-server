@@ -20,5 +20,12 @@ coverage/
 # Docker (keep the Dockerfile itself, just ignore local overrides)
 docker-compose.override.yml
 
+# Spec PDFs kept outside the repo (confidential / large)
+docs/
+
+# Local tooling / doc extracts (not part of the app)
+.tmp-docs-extract/
+.venv-pdf/
+
 # macOS
 .DS_Store
