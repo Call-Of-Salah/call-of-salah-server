@@ -6,7 +6,7 @@ Backend API for Call of Salah: gamified masjid prayer attendance for young Musli
 
 | Layer | Choice |
 | --- | --- |
-| Runtime | Node.js 20+ / TypeScript |
+| Runtime | Node.js 24+ / TypeScript |
 | API | Express REST under `/v1` |
 | Hosting | Google Cloud Run (Docker) |
 | Database | Supabase managed PostgreSQL + Prisma |
