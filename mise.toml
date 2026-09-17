@@ -1,0 +1,4 @@
+[tools]
+# Node 24 is the active LTS line. Cloud Run and the Dockerfile track this exact version.
+node = "24.19.0"
+pnpm = "11.22.0"

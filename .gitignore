@@ -2,6 +2,13 @@ node_modules/
 dist/
 build/
 
+# src/generated/ is deliberately NOT ignored — see AGENTS.md "Generated client".
+
+# pnpm is the only package manager here — a lockfile from npm means someone ran the
+# wrong command, so keep it out of commits.
+package-lock.json
+yarn.lock
+
 # Environment / secrets
 .env
 .env.*.local

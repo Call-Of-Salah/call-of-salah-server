@@ -13,11 +13,15 @@ The backend API for Call of Salah.
 
 ## Getting started
 
+See [docs/RUNNING_LOCALLY.md](./docs/RUNNING_LOCALLY.md) for full setup, including the
+local Supabase/Postgres stack.
+
 ```bash
-cp .env.example .env   # fill in real values
-npm install
-npx prisma migrate dev
-npm run dev
+mise install && pnpm install
+pnpm db:start
+cp .env.example .env   # then fill in DATABASE_URL / DIRECT_URL — see the doc above
+pnpm migrate:dev
+pnpm dev
 ```
 
 ## Contributing

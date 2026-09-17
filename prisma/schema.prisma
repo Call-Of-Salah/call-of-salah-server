@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// admin_user_id is a bare UUID column (no FK yet) — admin_users doesn't exist in the
+/// schema yet. Wire up the relation once that table lands.
+model Masjid {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String   @db.VarChar(100)
+  addressLine1         String   @map("address_line1") @db.VarChar(100)
+  addressLine2         String?  @map("address_line2") @db.VarChar(100)
+  city                 String   @db.VarChar(60)
+  postcode             String   @db.VarChar(10)
+  latitude             Float    @db.DoublePrecision
+  longitude            Float    @db.DoublePrecision
+  geofenceRadiusMetres Int      @default(200) @map("geofence_radius_metres")
+  adminUserId          String?  @map("admin_user_id") @db.Uuid
+  active               Boolean  @default(true)
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("masajid")
+}
