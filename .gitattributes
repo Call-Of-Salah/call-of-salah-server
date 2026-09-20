@@ -1,0 +1,4 @@
+# The Prisma client is committed (see AGENTS.md "Generated client"). Collapse it in GitHub
+# diffs and suppress it in `git diff` — a one-column schema change rewrites hundreds of
+# lines across models.ts, commonInputTypes.ts and internal/prismaNamespace.ts.
+src/generated/** linguist-generated=true -diff
