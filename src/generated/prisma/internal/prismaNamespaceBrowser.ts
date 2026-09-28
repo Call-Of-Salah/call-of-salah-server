@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Masjid: 'Masjid'
+  Masjid: 'Masjid',
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -86,6 +87,18 @@ export const MasjidScalarFieldEnum = {
 } as const
 
 export type MasjidScalarFieldEnum = (typeof MasjidScalarFieldEnum)[keyof typeof MasjidScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  authUid: 'authUid',
+  status: 'status',
+  role: 'role',
+  masjidId: 'masjidId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SortOrder = {

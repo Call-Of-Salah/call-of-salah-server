@@ -7,14 +7,14 @@ export interface ErrorDetail {
 
 /**
  * Base for every error the app throws on purpose. The terminal error handler formats
- * these into the standard `{ status, message, errors }` envelope; anything that isn't an
- * `AppError` is treated as unexpected and comes back as a bare 500.
+ * these into `{ error, message, details?, meta.request_id }`.
  */
 export class AppError extends Error {
   constructor(
     public readonly status: HttpStatus,
+    public readonly code: string,
     message: string,
-    public readonly errors?: ErrorDetail[],
+    public readonly details?: ErrorDetail[],
   ) {
     super(message);
     this.name = new.target.name;
@@ -22,49 +22,55 @@ export class AppError extends Error {
 }
 
 export class BadRequestError extends AppError {
-  constructor(message = 'Bad request', errors?: ErrorDetail[]) {
-    super(HttpStatus.BAD_REQUEST, message, errors);
+  constructor(message = 'Bad request', details?: ErrorDetail[]) {
+    super(HttpStatus.BAD_REQUEST, 'BAD_REQUEST', message, details);
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(errors: ErrorDetail[], message = 'Validation failed') {
-    super(HttpStatus.BAD_REQUEST, message, errors);
+  constructor(details: ErrorDetail[], message = 'Validation failed') {
+    super(HttpStatus.BAD_REQUEST, 'VALIDATION_FAILED', message, details);
   }
 }
 
 export class UnauthorizedError extends AppError {
-  constructor(message = 'Unauthorized') {
-    super(HttpStatus.UNAUTHORIZED, message);
+  constructor(code = 'UNAUTHORIZED', message = 'Unauthorized') {
+    super(HttpStatus.UNAUTHORIZED, code, message);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(message = 'Forbidden') {
-    super(HttpStatus.FORBIDDEN, message);
+  constructor(code = 'FORBIDDEN', message = 'Forbidden') {
+    super(HttpStatus.FORBIDDEN, code, message);
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(message = 'Not found') {
-    super(HttpStatus.NOT_FOUND, message);
+    super(HttpStatus.NOT_FOUND, 'NOT_FOUND', message);
   }
 }
 
 export class ConflictError extends AppError {
   constructor(message = 'Conflict') {
-    super(HttpStatus.CONFLICT, message);
+    super(HttpStatus.CONFLICT, 'CONFLICT', message);
+  }
+}
+
+export class GoneError extends AppError {
+  constructor(code = 'GONE', message = 'Gone') {
+    super(HttpStatus.GONE, code, message);
   }
 }
 
 export class NotImplementedError extends AppError {
   constructor(message = 'Not implemented') {
-    super(HttpStatus.NOT_IMPLEMENTED, message);
+    super(HttpStatus.NOT_IMPLEMENTED, 'NOT_IMPLEMENTED', message);
   }
 }
 
 export class InternalServerError extends AppError {
   constructor(message = 'Internal server error') {
-    super(HttpStatus.INTERNAL_SERVER_ERROR, message);
+    super(HttpStatus.INTERNAL_SERVER_ERROR, 'INTERNAL_ERROR', message);
   }
 }

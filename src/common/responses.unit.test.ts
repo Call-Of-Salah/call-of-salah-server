@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
 
+import { buildFakeUser } from '../testing/mocks/index.js';
 import { createTestApp } from '../testing/testConfig.js';
 
 /**
@@ -10,54 +11,78 @@ import { createTestApp } from '../testing/testConfig.js';
  */
 describe('response validation', () => {
   it('strips fields the response schema does not declare', async () => {
-    const { app } = createTestApp({
+    const user = buildFakeUser();
+    const { app, bearer } = await createTestApp({
       repositories: {
         userRepository: {
-          findById: vi.fn(async () => ({
-            id: 'a',
-            email: 'a@example.com',
-            passwordHash: 'must-not-be-sent',
+          findById: vi.fn(),
+          findByAuthUid: vi.fn(async () => ({
+            ...user,
+            createdAt: user.createdAt,
+            extraSecret: 'must-not-be-sent',
           })),
         } as never,
       },
     });
+    const token = await bearer(user.authUid);
 
-    const res = await request(app).get('/v1/users/a');
+    const res = await request(app).get('/v1/users/me').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual({ status: 200, body: { id: 'a', email: 'a@example.com' } });
+    expect(res.body.data).toEqual({
+      id: user.id,
+      authUid: user.authUid,
+      status: user.status,
+      role: user.role,
+      masjidId: user.masjidId,
+    });
+    expect(JSON.stringify(res.body)).not.toContain('must-not-be-sent');
   });
 
   it('returns a bare 500 when the body does not match the schema, leaking nothing', async () => {
-    const { app } = createTestApp({
+    const user = buildFakeUser();
+    const { app, bearer } = await createTestApp({
       repositories: {
         userRepository: {
-          findById: vi.fn(async () => ({ id: 'a' })),
+          findById: vi.fn(),
+          findByAuthUid: vi.fn(async () => ({ id: user.id, authUid: user.authUid })),
         } as never,
       },
     });
+    const token = await bearer(user.authUid);
 
-    const res = await request(app).get('/v1/users/a');
+    const res = await request(app).get('/v1/users/me').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(500);
-    expect(res.body).toEqual({ status: 500, message: 'Internal server error' });
+    expect(res.body).toEqual({
+      error: 'INTERNAL_ERROR',
+      message: 'Internal server error',
+      meta: { request_id: expect.any(String) },
+    });
   });
 
   it('returns a bare 500 for an unexpected error, with no message or stack', async () => {
-    const { app } = createTestApp({
+    const user = buildFakeUser();
+    const { app, bearer } = await createTestApp({
       repositories: {
         userRepository: {
-          findById: vi.fn(async () => {
+          findById: vi.fn(),
+          findByAuthUid: vi.fn(async () => {
             throw new Error('connection string postgres://user:password@host');
           }),
         } as never,
       },
     });
+    const token = await bearer(user.authUid);
 
-    const res = await request(app).get('/v1/users/a');
+    const res = await request(app).get('/v1/users/me').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(500);
-    expect(res.body).toEqual({ status: 500, message: 'Internal server error' });
+    expect(res.body).toEqual({
+      error: 'INTERNAL_ERROR',
+      message: 'Internal server error',
+      meta: { request_id: expect.any(String) },
+    });
     expect(JSON.stringify(res.body)).not.toContain('password');
   });
 });

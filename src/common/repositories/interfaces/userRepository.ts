@@ -1,5 +1,6 @@
-import type { UserRecord } from './userRecord.js';
+import type { UserModel } from '../../../generated/prisma/models.js';
 
 export interface UserRepository {
-  findById(id: string): Promise<UserRecord | null>;
+  findById(id: string): Promise<UserModel | null>;
+  findByAuthUid(authUid: string): Promise<UserModel | null>;
 }

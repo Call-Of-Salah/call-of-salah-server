@@ -1,23 +1,23 @@
 import type { Request, Response } from 'express';
 
-import { NotFoundError } from '../common/errors.js';
+import { UnauthorizedError } from '../common/errors.js';
 import { sendSuccess } from '../common/responses.js';
-import type { UserService } from '../common/services/index.js';
-import type { GetUserParams } from '../routes/users.schema.js';
 
-export interface UserControllerDeps {
-  userService: UserService;
-}
-export function createUserController(deps: UserControllerDeps) {
+export function createUserController() {
   return {
-    getUserById: async (req: Request<GetUserParams>, res: Response): Promise<void> => {
-      const user = await deps.userService.getUser(req.params.userId);
-
+    getMe: async (req: Request, res: Response): Promise<void> => {
+      const user = req.user;
       if (!user) {
-        throw new NotFoundError('User not found');
+        throw new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header');
       }
 
-      sendSuccess(res, user);
+      sendSuccess(res, {
+        id: user.id,
+        authUid: user.authUid,
+        status: user.status,
+        role: user.role,
+        masjidId: user.masjidId,
+      });
     },
   };
 }

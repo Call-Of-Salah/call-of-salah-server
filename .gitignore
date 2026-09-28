@@ -27,5 +27,13 @@ coverage/
 # Docker (keep the Dockerfile itself, just ignore local overrides)
 docker-compose.override.yml
 
+# Product specs (Parts 1-14, Architecture v2, etc.). Local only, never commit.
+# Tracked markdown under docs/ (RUNNING_LOCALLY, IMPLEMENTATION_PLAN) stays in git.
+docs/*.pdf
+
+# Local Supabase JWT signing keys (private). Never commit.
+supabase/signing_keys.json
+supabase/signing_key.json
+
 # macOS
 .DS_Store

@@ -1,9 +1,10 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 
 import { PrismaClient } from '../generated/prisma/client.js';
+import { createRemoteSupabaseJwtVerifier, type JwtVerifier } from './auth/jwtVerifier.js';
 import {
-  InMemoryUserRepository,
   PrismaMasjidRepository,
+  PrismaUserRepository,
   type MasjidRepository,
   type UserRepository,
 } from './repositories/index.js';
@@ -20,6 +21,7 @@ export const IocKey = {
   PrismaClient: 'PrismaClient',
   MasjidRepository: 'MasjidRepository',
   MasjidService: 'MasjidService',
+  JwtVerifier: 'JwtVerifier',
 } as const;
 
 /**
@@ -33,6 +35,7 @@ export interface IocRegistry {
   [IocKey.PrismaClient]: PrismaClient;
   [IocKey.MasjidRepository]: MasjidRepository;
   [IocKey.MasjidService]: MasjidService;
+  [IocKey.JwtVerifier]: JwtVerifier;
 }
 
 interface Registration<Key extends keyof IocRegistry> {
@@ -66,7 +69,7 @@ export const ioc = <Key extends keyof IocRegistry>(registration: Registration<Ke
 export const iocGetUserRepository = ioc({
   key: IocKey.UserRepository,
   mode: Mode.SINGLETON,
-  factory: (): UserRepository => new InMemoryUserRepository(),
+  factory: (): UserRepository => new PrismaUserRepository(iocGetPrismaClient()),
 });
 
 export const iocGetUserService = ioc({
@@ -103,6 +106,19 @@ export const iocGetMasjidService = ioc({
   key: IocKey.MasjidService,
   mode: Mode.SINGLETON,
   factory: () => new MasjidService(iocGetMasjidRepository()),
+});
+
+export const iocGetJwtVerifier = ioc({
+  key: IocKey.JwtVerifier,
+  mode: Mode.SINGLETON,
+  factory: (): JwtVerifier => {
+    const supabaseUrl = process.env['SUPABASE_URL'];
+    if (!supabaseUrl) {
+      throw new Error('SUPABASE_URL is not set');
+    }
+
+    return createRemoteSupabaseJwtVerifier(supabaseUrl);
+  },
 });
 
 // ---------------------------------------------------------------------------
