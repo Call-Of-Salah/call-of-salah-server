@@ -3,6 +3,7 @@ import type { CryptoKey } from 'jose';
 
 import { createApp } from '../app.js';
 import { SupabaseJwtVerifier } from '../common/auth/jwtVerifier.js';
+import { loadConfig } from '../common/config.js';
 import { IocKey, resetTestContainer } from '../common/ioc.js';
 import type { MasjidModel, UserModel } from '../generated/prisma/models.js';
 import { createTestJwtKeys, signTestAccessToken, TEST_JWT_AUDIENCE, TEST_JWT_ISSUER } from './jwt.js';
@@ -44,6 +45,12 @@ export async function createTestApp(options: TestAppOptions = {}): Promise<TestA
   };
 
   resetTestContainer({
+    [IocKey.Config]: loadConfig({
+      NODE_ENV: 'test',
+      PORT: '3000',
+      DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:5432/postgres',
+      SUPABASE_URL: 'http://127.0.0.1:54321',
+    }),
     [IocKey.UserRepository]: repositories.userRepository,
     [IocKey.MasjidRepository]: repositories.masjidRepository,
     [IocKey.JwtVerifier]: new SupabaseJwtVerifier(keys.getKey, {

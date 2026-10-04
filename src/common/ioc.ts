@@ -2,6 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 
 import { PrismaClient } from '../generated/prisma/client.js';
 import { createRemoteSupabaseJwtVerifier, type JwtVerifier } from './auth/jwtVerifier.js';
+import { loadConfig, type AppConfig } from './config.js';
 import {
   PrismaMasjidRepository,
   PrismaUserRepository,
@@ -16,6 +17,7 @@ export enum Mode {
 
 /** Every registration key, in one place, so each registration below stays self-consistent. */
 export const IocKey = {
+  Config: 'Config',
   UserRepository: 'UserRepository',
   UserService: 'UserService',
   PrismaClient: 'PrismaClient',
@@ -30,6 +32,7 @@ export const IocKey = {
  * mock under the wrong key are all compile errors rather than runtime surprises.
  */
 export interface IocRegistry {
+  [IocKey.Config]: AppConfig;
   [IocKey.UserRepository]: UserRepository;
   [IocKey.UserService]: UserService;
   [IocKey.PrismaClient]: PrismaClient;
@@ -78,7 +81,13 @@ export const iocGetUserService = ioc({
   factory: () => new UserService(iocGetUserRepository()),
 });
 
-// DATABASE_URL is the transaction pooler — see AGENTS.md "Database". The CLI (migrate,
+export const iocGetConfig = ioc({
+  key: IocKey.Config,
+  mode: Mode.SINGLETON,
+  factory: (): AppConfig => loadConfig(),
+});
+
+// DATABASE_URL is the transaction pooler. See AGENTS.md "Database". The CLI (migrate,
 // introspect) connects separately, straight to DIRECT_URL, via prisma.config.ts.
 //
 // TODO(Phase 2): register a disposer once disposeContainer() exists so this pool closes
@@ -86,14 +95,7 @@ export const iocGetUserService = ioc({
 export const iocGetPrismaClient = ioc({
   key: IocKey.PrismaClient,
   mode: Mode.SINGLETON,
-  factory: (): PrismaClient => {
-    const databaseUrl = process.env['DATABASE_URL'];
-    if (!databaseUrl) {
-      throw new Error('DATABASE_URL is not set');
-    }
-
-    return new PrismaClient({ adapter: new PrismaPg(databaseUrl) });
-  },
+  factory: (): PrismaClient => new PrismaClient({ adapter: new PrismaPg(iocGetConfig().database.url) }),
 });
 
 export const iocGetMasjidRepository = ioc({
@@ -111,14 +113,7 @@ export const iocGetMasjidService = ioc({
 export const iocGetJwtVerifier = ioc({
   key: IocKey.JwtVerifier,
   mode: Mode.SINGLETON,
-  factory: (): JwtVerifier => {
-    const supabaseUrl = process.env['SUPABASE_URL'];
-    if (!supabaseUrl) {
-      throw new Error('SUPABASE_URL is not set');
-    }
-
-    return createRemoteSupabaseJwtVerifier(supabaseUrl);
-  },
+  factory: (): JwtVerifier => createRemoteSupabaseJwtVerifier(iocGetConfig().supabase),
 });
 
 // ---------------------------------------------------------------------------

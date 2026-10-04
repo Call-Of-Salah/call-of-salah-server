@@ -40,10 +40,15 @@ export class SupabaseJwtVerifier implements JwtVerifier {
   }
 }
 
-export function createRemoteSupabaseJwtVerifier(supabaseUrl: string): SupabaseJwtVerifier {
-  const base = supabaseUrl.replace(/\/$/, '');
-  return new SupabaseJwtVerifier(createRemoteJWKSet(new URL(`${base}/auth/v1/.well-known/jwks.json`)), {
-    issuer: `${base}/auth/v1`,
-    audience: 'authenticated',
+export interface SupabaseJwtConfig {
+  jwksUrl: string;
+  jwtIssuer: string;
+  jwtAudience: string;
+}
+
+export function createRemoteSupabaseJwtVerifier(supabase: SupabaseJwtConfig): SupabaseJwtVerifier {
+  return new SupabaseJwtVerifier(createRemoteJWKSet(new URL(supabase.jwksUrl)), {
+    issuer: supabase.jwtIssuer,
+    audience: supabase.jwtAudience,
   });
 }
