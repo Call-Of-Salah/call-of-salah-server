@@ -1,14 +1,11 @@
 import { z } from 'zod';
 
-export const getUserParamsSchema = z.object({
-  userId: z.string().min(1),
-});
-
-export type GetUserParams = z.infer<typeof getUserParamsSchema>;
-
-export const userResponseSchema = z.object({
+export const meResponseSchema = z.object({
   id: z.string(),
-  email: z.string(),
+  authUid: z.string(),
+  status: z.string(),
+  role: z.string(),
+  masjidId: z.string(),
 });
 
-export type UserResponse = z.infer<typeof userResponseSchema>;
+export type MeResponse = z.infer<typeof meResponseSchema>;

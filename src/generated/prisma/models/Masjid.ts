@@ -281,6 +281,7 @@ export type MasjidWhereInput = {
   adminUserId?: Prisma.UuidNullableFilter<"Masjid"> | string | null
   active?: Prisma.BoolFilter<"Masjid"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Masjid"> | Date | string
+  users?: Prisma.UserListRelationFilter
 }
 
 export type MasjidOrderByWithRelationInput = {
@@ -296,6 +297,7 @@ export type MasjidOrderByWithRelationInput = {
   adminUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  users?: Prisma.UserOrderByRelationAggregateInput
 }
 
 export type MasjidWhereUniqueInput = Prisma.AtLeast<{
@@ -314,6 +316,7 @@ export type MasjidWhereUniqueInput = Prisma.AtLeast<{
   adminUserId?: Prisma.UuidNullableFilter<"Masjid"> | string | null
   active?: Prisma.BoolFilter<"Masjid"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Masjid"> | Date | string
+  users?: Prisma.UserListRelationFilter
 }, "id">
 
 export type MasjidOrderByWithAggregationInput = {
@@ -367,6 +370,7 @@ export type MasjidCreateInput = {
   adminUserId?: string | null
   active?: boolean
   createdAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutMasjidInput
 }
 
 export type MasjidUncheckedCreateInput = {
@@ -382,6 +386,7 @@ export type MasjidUncheckedCreateInput = {
   adminUserId?: string | null
   active?: boolean
   createdAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMasjidInput
 }
 
 export type MasjidUpdateInput = {
@@ -397,6 +402,7 @@ export type MasjidUpdateInput = {
   adminUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutMasjidNestedInput
 }
 
 export type MasjidUncheckedUpdateInput = {
@@ -412,6 +418,7 @@ export type MasjidUncheckedUpdateInput = {
   adminUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutMasjidNestedInput
 }
 
 export type MasjidCreateManyInput = {
@@ -516,6 +523,11 @@ export type MasjidSumOrderByAggregateInput = {
   geofenceRadiusMetres?: Prisma.SortOrder
 }
 
+export type MasjidScalarRelationFilter = {
+  is?: Prisma.MasjidWhereInput
+  isNot?: Prisma.MasjidWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -548,6 +560,125 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type MasjidCreateNestedOneWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.MasjidCreateWithoutUsersInput, Prisma.MasjidUncheckedCreateWithoutUsersInput>
+  connectOrCreate?: Prisma.MasjidCreateOrConnectWithoutUsersInput
+  connect?: Prisma.MasjidWhereUniqueInput
+}
+
+export type MasjidUpdateOneRequiredWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.MasjidCreateWithoutUsersInput, Prisma.MasjidUncheckedCreateWithoutUsersInput>
+  connectOrCreate?: Prisma.MasjidCreateOrConnectWithoutUsersInput
+  upsert?: Prisma.MasjidUpsertWithoutUsersInput
+  connect?: Prisma.MasjidWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MasjidUpdateToOneWithWhereWithoutUsersInput, Prisma.MasjidUpdateWithoutUsersInput>, Prisma.MasjidUncheckedUpdateWithoutUsersInput>
+}
+
+export type MasjidCreateWithoutUsersInput = {
+  id?: string
+  name: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  postcode: string
+  latitude: number
+  longitude: number
+  geofenceRadiusMetres?: number
+  adminUserId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+}
+
+export type MasjidUncheckedCreateWithoutUsersInput = {
+  id?: string
+  name: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  postcode: string
+  latitude: number
+  longitude: number
+  geofenceRadiusMetres?: number
+  adminUserId?: string | null
+  active?: boolean
+  createdAt?: Date | string
+}
+
+export type MasjidCreateOrConnectWithoutUsersInput = {
+  where: Prisma.MasjidWhereUniqueInput
+  create: Prisma.XOR<Prisma.MasjidCreateWithoutUsersInput, Prisma.MasjidUncheckedCreateWithoutUsersInput>
+}
+
+export type MasjidUpsertWithoutUsersInput = {
+  update: Prisma.XOR<Prisma.MasjidUpdateWithoutUsersInput, Prisma.MasjidUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.MasjidCreateWithoutUsersInput, Prisma.MasjidUncheckedCreateWithoutUsersInput>
+  where?: Prisma.MasjidWhereInput
+}
+
+export type MasjidUpdateToOneWithWhereWithoutUsersInput = {
+  where?: Prisma.MasjidWhereInput
+  data: Prisma.XOR<Prisma.MasjidUpdateWithoutUsersInput, Prisma.MasjidUncheckedUpdateWithoutUsersInput>
+}
+
+export type MasjidUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  postcode?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  geofenceRadiusMetres?: Prisma.IntFieldUpdateOperationsInput | number
+  adminUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MasjidUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  postcode?: Prisma.StringFieldUpdateOperationsInput | string
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  geofenceRadiusMetres?: Prisma.IntFieldUpdateOperationsInput | number
+  adminUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type MasjidCountOutputType
+ */
+
+export type MasjidCountOutputType = {
+  users: number
+}
+
+export type MasjidCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  users?: boolean | MasjidCountOutputTypeCountUsersArgs
+}
+
+/**
+ * MasjidCountOutputType without action
+ */
+export type MasjidCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MasjidCountOutputType
+   */
+  select?: Prisma.MasjidCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * MasjidCountOutputType without action
+ */
+export type MasjidCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
 
 
 export type MasjidSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -563,6 +694,8 @@ export type MasjidSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   adminUserId?: boolean
   active?: boolean
   createdAt?: boolean
+  users?: boolean | Prisma.Masjid$usersArgs<ExtArgs>
+  _count?: boolean | Prisma.MasjidCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["masjid"]>
 
 export type MasjidSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -611,10 +744,18 @@ export type MasjidSelectScalar = {
 }
 
 export type MasjidOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "addressLine1" | "addressLine2" | "city" | "postcode" | "latitude" | "longitude" | "geofenceRadiusMetres" | "adminUserId" | "active" | "createdAt", ExtArgs["result"]["masjid"]>
+export type MasjidInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  users?: boolean | Prisma.Masjid$usersArgs<ExtArgs>
+  _count?: boolean | Prisma.MasjidCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type MasjidIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type MasjidIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $MasjidPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Masjid"
-  objects: {}
+  objects: {
+    users: Prisma.$UserPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
@@ -1022,6 +1163,7 @@ readonly fields: MasjidFieldRefs;
  */
 export interface Prisma__MasjidClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  users<T extends Prisma.Masjid$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Masjid$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1080,6 +1222,10 @@ export type MasjidFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
+  /**
    * Filter, which Masjid to fetch.
    */
   where: Prisma.MasjidWhereUniqueInput
@@ -1098,6 +1244,10 @@ export type MasjidFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
+  /**
    * Filter, which Masjid to fetch.
    */
   where: Prisma.MasjidWhereUniqueInput
@@ -1115,6 +1265,10 @@ export type MasjidFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Masjid
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
   /**
    * Filter, which Masjid to fetch.
    */
@@ -1164,6 +1318,10 @@ export type MasjidFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
+  /**
    * Filter, which Masjid to fetch.
    */
   where?: Prisma.MasjidWhereInput
@@ -1211,6 +1369,10 @@ export type MasjidFindManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Masjid
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
   /**
    * Filter, which Masjids to fetch.
    */
@@ -1260,6 +1422,10 @@ export type MasjidCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
+  /**
    * The data needed to create a Masjid.
    */
   data: Prisma.XOR<Prisma.MasjidCreateInput, Prisma.MasjidUncheckedCreateInput>
@@ -1307,6 +1473,10 @@ export type MasjidUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Masjid
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
   /**
    * The data needed to update a Masjid.
    */
@@ -1374,6 +1544,10 @@ export type MasjidUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
+  /**
    * The filter to search for the Masjid to update in case it exists.
    */
   where: Prisma.MasjidWhereUniqueInput
@@ -1400,6 +1574,10 @@ export type MasjidDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
+  /**
    * Filter which Masjid to delete.
    */
   where: Prisma.MasjidWhereUniqueInput
@@ -1420,6 +1598,30 @@ export type MasjidDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Masjid.users
+ */
+export type Masjid$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
  * Masjid without action
  */
 export type MasjidDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1431,4 +1633,8 @@ export type MasjidDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Masjid
    */
   omit?: Prisma.MasjidOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MasjidInclude<ExtArgs> | null
 }

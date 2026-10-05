@@ -1,17 +1,18 @@
 import 'dotenv/config';
 
 import { createApp } from './app.js';
+import { loadConfig } from './common/config.js';
 
-const port = Number(process.env['PORT'] ?? 3000);
+const config = loadConfig();
 const app = createApp();
 
-const server = app.listen(port, () => {
+const server = app.listen(config.port, () => {
   console.log(
     JSON.stringify({
       msg: 'call-of-salah-server listening',
       node: process.version,
-      env: process.env['NODE_ENV'] ?? 'development',
-      port,
+      env: config.env,
+      port: config.port,
     }),
   );
 });

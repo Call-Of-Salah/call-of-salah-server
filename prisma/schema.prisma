@@ -7,6 +7,22 @@ datasource db {
   provider = "postgresql"
 }
 
+enum AccountStatus {
+  PENDING_EMAIL_VERIFY
+  PENDING_PARENTAL_CONSENT
+  PENDING_ID_VERIFICATION
+  PARENT_ACTIVE
+  ID_VERIFIED
+  SUSPENDED
+  DELETION_PENDING
+  DELETED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
 /// admin_user_id is a bare UUID column (no FK yet) — admin_users doesn't exist in the
 /// schema yet. Wire up the relation once that table lands.
 model Masjid {
@@ -23,5 +39,23 @@ model Masjid {
   active               Boolean  @default(true)
   createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
+  users User[]
+
   @@map("masajid")
+}
+
+/// Thin identity row for JWT verification (KAN-65). Full Part 6 profile lands with onboarding.
+model User {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  authUid   String        @unique @map("auth_uid") @db.VarChar(128)
+  status    AccountStatus @default(PENDING_EMAIL_VERIFY)
+  role      UserRole      @default(USER)
+  masjidId  String        @map("masjid_id") @db.Uuid
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  masjid Masjid @relation(fields: [masjidId], references: [id])
+
+  @@index([masjidId], map: "idx_users_masjid")
+  @@index([status], map: "idx_users_status")
+  @@map("users")
 }

@@ -23,3 +23,8 @@ export * from './enums.js';
  * schema yet. Wire up the relation once that table lands.
  */
 export type Masjid = Prisma.MasjidModel
+/**
+ * Model User
+ * Thin identity row for JWT verification (KAN-65). Full Part 6 profile lands with onboarding.
+ */
+export type User = Prisma.UserModel
