@@ -50,13 +50,16 @@ export async function createTestApp(options: TestAppOptions = {}): Promise<TestA
       PORT: '3000',
       DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:5432/postgres',
       SUPABASE_URL: 'http://127.0.0.1:54321',
+      SUPABASE_PUBLISHABLE_KEY: 'test-publishable-key',
     }),
     [IocKey.UserRepository]: repositories.userRepository,
     [IocKey.MasjidRepository]: repositories.masjidRepository,
-    [IocKey.JwtVerifier]: new SupabaseJwtVerifier(keys.getKey, {
-      issuer: TEST_JWT_ISSUER,
-      audience: TEST_JWT_AUDIENCE,
-    }),
+    [IocKey.JwtVerifier]: new SupabaseJwtVerifier(
+      keys.getKey,
+      { issuer: TEST_JWT_ISSUER, audience: TEST_JWT_AUDIENCE },
+      'http://127.0.0.1:54321',
+      'test-publishable-key',
+    ),
   });
 
   const signAccessToken = (

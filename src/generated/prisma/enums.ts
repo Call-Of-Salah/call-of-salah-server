@@ -23,6 +23,15 @@ export const AccountStatus = {
 export type AccountStatus = (typeof AccountStatus)[keyof typeof AccountStatus]
 
 
+export const AccountType = {
+  PARENT: 'PARENT',
+  CHILD: 'CHILD',
+  TEEN: 'TEEN'
+} as const
+
+export type AccountType = (typeof AccountType)[keyof typeof AccountType]
+
+
 export const UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN'

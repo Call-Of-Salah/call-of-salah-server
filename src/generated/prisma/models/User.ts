@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model User
- * Thin identity row for JWT verification (KAN-65). Full Part 6 profile lands with onboarding.
+ * 
  */
 export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayload>
 
@@ -29,6 +29,13 @@ export type UserMinAggregateOutputType = {
   authUid: string | null
   status: $Enums.AccountStatus | null
   role: $Enums.UserRole | null
+  accountType: $Enums.AccountType | null
+  firstName: string | null
+  lastName: string | null
+  username: string | null
+  email: string | null
+  dateOfBirth: Date | null
+  phoneNumber: string | null
   masjidId: string | null
   createdAt: Date | null
 }
@@ -38,6 +45,13 @@ export type UserMaxAggregateOutputType = {
   authUid: string | null
   status: $Enums.AccountStatus | null
   role: $Enums.UserRole | null
+  accountType: $Enums.AccountType | null
+  firstName: string | null
+  lastName: string | null
+  username: string | null
+  email: string | null
+  dateOfBirth: Date | null
+  phoneNumber: string | null
   masjidId: string | null
   createdAt: Date | null
 }
@@ -47,6 +61,13 @@ export type UserCountAggregateOutputType = {
   authUid: number
   status: number
   role: number
+  accountType: number
+  firstName: number
+  lastName: number
+  username: number
+  email: number
+  dateOfBirth: number
+  phoneNumber: number
   masjidId: number
   createdAt: number
   _all: number
@@ -58,6 +79,13 @@ export type UserMinAggregateInputType = {
   authUid?: true
   status?: true
   role?: true
+  accountType?: true
+  firstName?: true
+  lastName?: true
+  username?: true
+  email?: true
+  dateOfBirth?: true
+  phoneNumber?: true
   masjidId?: true
   createdAt?: true
 }
@@ -67,6 +95,13 @@ export type UserMaxAggregateInputType = {
   authUid?: true
   status?: true
   role?: true
+  accountType?: true
+  firstName?: true
+  lastName?: true
+  username?: true
+  email?: true
+  dateOfBirth?: true
+  phoneNumber?: true
   masjidId?: true
   createdAt?: true
 }
@@ -76,6 +111,13 @@ export type UserCountAggregateInputType = {
   authUid?: true
   status?: true
   role?: true
+  accountType?: true
+  firstName?: true
+  lastName?: true
+  username?: true
+  email?: true
+  dateOfBirth?: true
+  phoneNumber?: true
   masjidId?: true
   createdAt?: true
   _all?: true
@@ -158,6 +200,13 @@ export type UserGroupByOutputType = {
   authUid: string
   status: $Enums.AccountStatus
   role: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date
+  phoneNumber: string | null
   masjidId: string
   createdAt: Date
   _count: UserCountAggregateOutputType | null
@@ -188,6 +237,13 @@ export type UserWhereInput = {
   authUid?: Prisma.StringFilter<"User"> | string
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFilter<"User"> | $Enums.AccountType
+  firstName?: Prisma.StringFilter<"User"> | string
+  lastName?: Prisma.StringFilter<"User"> | string
+  username?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  dateOfBirth?: Prisma.DateTimeFilter<"User"> | Date | string
+  phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   masjidId?: Prisma.UuidFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   masjid?: Prisma.XOR<Prisma.MasjidScalarRelationFilter, Prisma.MasjidWhereInput>
@@ -198,6 +254,13 @@ export type UserOrderByWithRelationInput = {
   authUid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   masjidId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   masjid?: Prisma.MasjidOrderByWithRelationInput
@@ -206,21 +269,35 @@ export type UserOrderByWithRelationInput = {
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   authUid?: string
+  username?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFilter<"User"> | $Enums.AccountType
+  firstName?: Prisma.StringFilter<"User"> | string
+  lastName?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  dateOfBirth?: Prisma.DateTimeFilter<"User"> | Date | string
+  phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   masjidId?: Prisma.UuidFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   masjid?: Prisma.XOR<Prisma.MasjidScalarRelationFilter, Prisma.MasjidWhereInput>
-}, "id" | "authUid">
+}, "id" | "authUid" | "username">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   authUid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   masjidId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -236,6 +313,13 @@ export type UserScalarWhereWithAggregatesInput = {
   authUid?: Prisma.StringWithAggregatesFilter<"User"> | string
   status?: Prisma.EnumAccountStatusWithAggregatesFilter<"User"> | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeWithAggregatesFilter<"User"> | $Enums.AccountType
+  firstName?: Prisma.StringWithAggregatesFilter<"User"> | string
+  lastName?: Prisma.StringWithAggregatesFilter<"User"> | string
+  username?: Prisma.StringWithAggregatesFilter<"User"> | string
+  email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  dateOfBirth?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   masjidId?: Prisma.UuidWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -243,8 +327,15 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   authUid: string
-  status?: $Enums.AccountStatus
+  status: $Enums.AccountStatus
   role?: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date | string
+  phoneNumber?: string | null
   createdAt?: Date | string
   masjid: Prisma.MasjidCreateNestedOneWithoutUsersInput
 }
@@ -252,8 +343,15 @@ export type UserCreateInput = {
 export type UserUncheckedCreateInput = {
   id?: string
   authUid: string
-  status?: $Enums.AccountStatus
+  status: $Enums.AccountStatus
   role?: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date | string
+  phoneNumber?: string | null
   masjidId: string
   createdAt?: Date | string
 }
@@ -263,6 +361,13 @@ export type UserUpdateInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   masjid?: Prisma.MasjidUpdateOneRequiredWithoutUsersNestedInput
 }
@@ -272,6 +377,13 @@ export type UserUncheckedUpdateInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   masjidId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -279,8 +391,15 @@ export type UserUncheckedUpdateInput = {
 export type UserCreateManyInput = {
   id?: string
   authUid: string
-  status?: $Enums.AccountStatus
+  status: $Enums.AccountStatus
   role?: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date | string
+  phoneNumber?: string | null
   masjidId: string
   createdAt?: Date | string
 }
@@ -290,6 +409,13 @@ export type UserUpdateManyMutationInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -298,6 +424,13 @@ export type UserUncheckedUpdateManyInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   masjidId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -317,6 +450,13 @@ export type UserCountOrderByAggregateInput = {
   authUid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrder
   masjidId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -326,6 +466,13 @@ export type UserMaxOrderByAggregateInput = {
   authUid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrder
   masjidId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -335,6 +482,13 @@ export type UserMinOrderByAggregateInput = {
   authUid?: Prisma.SortOrder
   status?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  username?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrder
   masjidId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -389,19 +543,37 @@ export type EnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole
 }
 
+export type EnumAccountTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AccountType
+}
+
 export type UserCreateWithoutMasjidInput = {
   id?: string
   authUid: string
-  status?: $Enums.AccountStatus
+  status: $Enums.AccountStatus
   role?: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date | string
+  phoneNumber?: string | null
   createdAt?: Date | string
 }
 
 export type UserUncheckedCreateWithoutMasjidInput = {
   id?: string
   authUid: string
-  status?: $Enums.AccountStatus
+  status: $Enums.AccountStatus
   role?: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date | string
+  phoneNumber?: string | null
   createdAt?: Date | string
 }
 
@@ -439,6 +611,13 @@ export type UserScalarWhereInput = {
   authUid?: Prisma.StringFilter<"User"> | string
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFilter<"User"> | $Enums.AccountType
+  firstName?: Prisma.StringFilter<"User"> | string
+  lastName?: Prisma.StringFilter<"User"> | string
+  username?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  dateOfBirth?: Prisma.DateTimeFilter<"User"> | Date | string
+  phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   masjidId?: Prisma.UuidFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -446,8 +625,15 @@ export type UserScalarWhereInput = {
 export type UserCreateManyMasjidInput = {
   id?: string
   authUid: string
-  status?: $Enums.AccountStatus
+  status: $Enums.AccountStatus
   role?: $Enums.UserRole
+  accountType: $Enums.AccountType
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  dateOfBirth: Date | string
+  phoneNumber?: string | null
   createdAt?: Date | string
 }
 
@@ -456,6 +642,13 @@ export type UserUpdateWithoutMasjidInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -464,6 +657,13 @@ export type UserUncheckedUpdateWithoutMasjidInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -472,6 +672,13 @@ export type UserUncheckedUpdateManyWithoutMasjidInput = {
   authUid?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -482,6 +689,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   authUid?: boolean
   status?: boolean
   role?: boolean
+  accountType?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  username?: boolean
+  email?: boolean
+  dateOfBirth?: boolean
+  phoneNumber?: boolean
   masjidId?: boolean
   createdAt?: boolean
   masjid?: boolean | Prisma.MasjidDefaultArgs<ExtArgs>
@@ -492,6 +706,13 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   authUid?: boolean
   status?: boolean
   role?: boolean
+  accountType?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  username?: boolean
+  email?: boolean
+  dateOfBirth?: boolean
+  phoneNumber?: boolean
   masjidId?: boolean
   createdAt?: boolean
   masjid?: boolean | Prisma.MasjidDefaultArgs<ExtArgs>
@@ -502,6 +723,13 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   authUid?: boolean
   status?: boolean
   role?: boolean
+  accountType?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  username?: boolean
+  email?: boolean
+  dateOfBirth?: boolean
+  phoneNumber?: boolean
   masjidId?: boolean
   createdAt?: boolean
   masjid?: boolean | Prisma.MasjidDefaultArgs<ExtArgs>
@@ -512,11 +740,18 @@ export type UserSelectScalar = {
   authUid?: boolean
   status?: boolean
   role?: boolean
+  accountType?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  username?: boolean
+  email?: boolean
+  dateOfBirth?: boolean
+  phoneNumber?: boolean
   masjidId?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authUid" | "status" | "role" | "masjidId" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authUid" | "status" | "role" | "accountType" | "firstName" | "lastName" | "username" | "email" | "dateOfBirth" | "phoneNumber" | "masjidId" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   masjid?: boolean | Prisma.MasjidDefaultArgs<ExtArgs>
 }
@@ -537,6 +772,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     authUid: string
     status: $Enums.AccountStatus
     role: $Enums.UserRole
+    accountType: $Enums.AccountType
+    firstName: string
+    lastName: string
+    username: string
+    email: string
+    dateOfBirth: Date
+    phoneNumber: string | null
     masjidId: string
     createdAt: Date
   }, ExtArgs["result"]["user"]>
@@ -967,6 +1209,13 @@ export interface UserFieldRefs {
   readonly authUid: Prisma.FieldRef<"User", 'String'>
   readonly status: Prisma.FieldRef<"User", 'AccountStatus'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
+  readonly accountType: Prisma.FieldRef<"User", 'AccountType'>
+  readonly firstName: Prisma.FieldRef<"User", 'String'>
+  readonly lastName: Prisma.FieldRef<"User", 'String'>
+  readonly username: Prisma.FieldRef<"User", 'String'>
+  readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly dateOfBirth: Prisma.FieldRef<"User", 'DateTime'>
+  readonly phoneNumber: Prisma.FieldRef<"User", 'String'>
   readonly masjidId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }

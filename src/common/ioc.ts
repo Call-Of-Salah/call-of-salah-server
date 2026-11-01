@@ -78,7 +78,7 @@ export const iocGetUserRepository = ioc({
 export const iocGetUserService = ioc({
   key: IocKey.UserService,
   mode: Mode.SINGLETON,
-  factory: () => new UserService(iocGetUserRepository()),
+  factory: () => new UserService(iocGetUserRepository(), iocGetJwtVerifier(), iocGetMasjidRepository()),
 });
 
 export const iocGetConfig = ioc({
