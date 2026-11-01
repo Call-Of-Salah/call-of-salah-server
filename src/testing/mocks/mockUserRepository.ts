@@ -9,6 +9,13 @@ export function buildFakeUser(overrides: Partial<UserModel> = {}): UserModel {
     authUid: 'supabase-auth-uid-1',
     status: 'ID_VERIFIED',
     role: 'USER',
+    accountType: 'PARENT',
+    firstName: 'Test',
+    lastName: 'User',
+    username: 'testuser',
+    email: 'test@example.com',
+    dateOfBirth: new Date('1990-01-01'),
+    phoneNumber: null,
     masjidId: buildFakeMasjid().id,
     createdAt: new Date('2026-01-01T00:00:00.000Z'),
     ...overrides,
@@ -22,5 +29,6 @@ export function createMockUserRepository(seed: UserModel[] = []) {
   return {
     findById: vi.fn(async (id: string): Promise<UserModel | null> => byId.get(id) ?? null),
     findByAuthUid: vi.fn(async (authUid: string): Promise<UserModel | null> => byAuthUid.get(authUid) ?? null),
+    create: vi.fn(async (input: unknown): Promise<UserModel> => buildFakeUser(input as Partial<UserModel>)),
   };
 }

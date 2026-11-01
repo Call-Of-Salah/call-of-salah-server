@@ -1,6 +1,7 @@
-import type { PrismaClient } from '../../generated/prisma/client.js';
+import { Prisma, type PrismaClient } from '../../generated/prisma/client.js';
 import type { UserModel } from '../../generated/prisma/models.js';
-import type { UserRepository } from './interfaces/index.js';
+import { ConflictError, ValidationError } from '../errors.js';
+import type { CreateUserInput, UserRepository } from './interfaces/index.js';
 
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -11,5 +12,21 @@ export class PrismaUserRepository implements UserRepository {
 
   async findByAuthUid(authUid: string): Promise<UserModel | null> {
     return this.prisma.user.findUnique({ where: { authUid } });
+  }
+
+  async create(input: CreateUserInput): Promise<UserModel> {
+    try {
+      return await this.prisma.user.create({ data: input });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ConflictError('EMAIL_ALREADY_REGISTERED', 'A user with this auth UID already exists');
+        }
+        if (error.code === 'P2003') {
+          throw new ValidationError([{ path: 'masjid_id', message: 'Masjid not found' }]);
+        }
+      }
+      throw error;
+    }
   }
 }

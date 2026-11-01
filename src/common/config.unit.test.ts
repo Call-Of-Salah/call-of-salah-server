@@ -7,6 +7,7 @@ const validEnv = {
   PORT: '3000',
   DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:5432/postgres',
   SUPABASE_URL: 'http://127.0.0.1:54321',
+  SUPABASE_PUBLISHABLE_KEY: 'test-anon-key',
 };
 
 describe('loadConfig', () => {
@@ -20,6 +21,7 @@ describe('loadConfig', () => {
         jwksUrl: 'http://127.0.0.1:54321/auth/v1/.well-known/jwks.json',
         jwtIssuer: 'http://127.0.0.1:54321/auth/v1',
         jwtAudience: 'authenticated',
+        publishableKey: 'test-anon-key',
       },
     });
   });
@@ -28,6 +30,7 @@ describe('loadConfig', () => {
     const config = loadConfig({
       DATABASE_URL: validEnv.DATABASE_URL,
       SUPABASE_URL: validEnv.SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY: validEnv.SUPABASE_PUBLISHABLE_KEY,
     });
 
     expect(config.port).toBe(3000);
@@ -65,6 +68,7 @@ describe('loadConfig', () => {
       loadConfig({
         DATABASE_URL: validEnv.DATABASE_URL,
         SUPABASE_URL: 'not-a-url',
+        SUPABASE_PUBLISHABLE_KEY: validEnv.SUPABASE_PUBLISHABLE_KEY,
       }),
     ).toThrow(/SUPABASE_URL must be a valid URL/);
   });

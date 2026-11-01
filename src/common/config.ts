@@ -5,6 +5,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is not set'),
   SUPABASE_URL: z.string().min(1, 'SUPABASE_URL is not set'),
+  SUPABASE_PUBLISHABLE_KEY: z.string().min(1, 'SUPABASE_PUBLISHABLE_KEY is not set'),
 });
 
 export interface AppConfig {
@@ -18,6 +19,7 @@ export interface AppConfig {
     jwksUrl: string;
     jwtIssuer: string;
     jwtAudience: 'authenticated';
+    publishableKey: string;
   };
 }
 
@@ -54,6 +56,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       jwksUrl: `${supabaseOrigin}/auth/v1/.well-known/jwks.json`,
       jwtIssuer: `${supabaseOrigin}/auth/v1`,
       jwtAudience: 'authenticated',
+      publishableKey: parsed.data.SUPABASE_PUBLISHABLE_KEY,
     },
   };
 }

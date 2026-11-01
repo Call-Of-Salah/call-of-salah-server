@@ -10,21 +10,14 @@ export interface RequireAuthDeps {
 }
 
 export function createRequireAuth(deps: RequireAuthDeps): RequestHandler {
-  return async (req, _res, next) => {
+  return async (req, res, next) => {
     try {
-      const header = req.headers.authorization;
-      if (typeof header !== 'string' || !header.startsWith('Bearer ')) {
-        next(new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header'));
-        return;
-      }
-
-      const token = header.slice('Bearer '.length).trim();
-      if (token.length === 0) {
-        next(new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header'));
-        return;
-      }
-
       let sub: string;
+      const token = res.locals.token;
+      if (!token || typeof token !== 'string') {
+        next(new UnauthorizedError('INVALID_TOKEN', 'Supabase token invalid or expired'));
+        return;
+      }
       try {
         ({ sub } = await deps.jwtVerifier.verify(token));
       } catch {
@@ -53,5 +46,24 @@ export function createRequireAuth(deps: RequireAuthDeps): RequestHandler {
     } catch (err) {
       next(err);
     }
+  };
+}
+
+export function extractTokenFromHeaderMiddleware(): RequestHandler {
+  return (req, res, next) => {
+    const header = req.headers.authorization;
+    if (typeof header !== 'string' || !header.startsWith('Bearer ')) {
+      next(new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header'));
+      return;
+    }
+
+    const token = header.slice('Bearer '.length).trim();
+    if (token.length === 0) {
+      next(new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header'));
+      return;
+    }
+
+    res.locals.token = token;
+    next();
   };
 }

@@ -10,6 +10,27 @@ import { ValidationError } from '../errors.js';
  * Returns a `RequestHandler` so it composes in a route chain:
  * `router.get(path, validateParams(schema), controller.handler)`.
  */
+export function validateBody(schema: ZodType): RequestHandler {
+  return (req, _res, next) => {
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+      next(
+        new ValidationError(
+          result.error.issues.map((issue) => ({
+            path: issue.path.join('.'),
+            message: issue.message,
+          })),
+        ),
+      );
+      return;
+    }
+
+    req.body = result.data;
+    next();
+  };
+}
+
 export function validateParams(schema: ZodType): RequestHandler {
   return (req, _res, next) => {
     const result = schema.safeParse(req.params);
