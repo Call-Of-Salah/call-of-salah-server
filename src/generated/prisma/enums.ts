@@ -29,3 +29,14 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const PrayerName = {
+  FAJR: 'FAJR',
+  DHUHR: 'DHUHR',
+  ASR: 'ASR',
+  MAGHRIB: 'MAGHRIB',
+  ISHA: 'ISHA'
+} as const
+
+export type PrayerName = (typeof PrayerName)[keyof typeof PrayerName]

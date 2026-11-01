@@ -30,6 +30,26 @@ export function validateParams(schema: ZodType): RequestHandler {
   };
 }
 
+export function validateQuery(schema: ZodType): RequestHandler {
+  return (req, _res, next) => {
+    const result = schema.safeParse(req.query);
+
+    if (!result.success) {
+      next(
+        new ValidationError(
+          result.error.issues.map((issue) => ({
+            path: issue.path.join('.'),
+            message: issue.message,
+          })),
+        ),
+      );
+      return;
+    }
+
+    next();
+  };
+}
+
 /**
  * Stashes the response schema on `res.locals` for `sendSuccess` to check the controller's
  * `body` against before it goes out. Deliberately doesn't touch `res.json` itself — the

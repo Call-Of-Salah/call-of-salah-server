@@ -231,6 +231,23 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
 }
 
+export type EnumPrayerNameFilter<$PrismaModel = never> = {
+  equals?: $Enums.PrayerName | Prisma.EnumPrayerNameFieldRefInput<$PrismaModel>
+  in?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPrayerNameFilter<$PrismaModel> | $Enums.PrayerName
+}
+
+export type EnumPrayerNameWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PrayerName | Prisma.EnumPrayerNameFieldRefInput<$PrismaModel>
+  in?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPrayerNameWithAggregatesFilter<$PrismaModel> | $Enums.PrayerName
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPrayerNameFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPrayerNameFilter<$PrismaModel>
+}
+
 export type EnumAccountStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.AccountStatus | Prisma.EnumAccountStatusFieldRefInput<$PrismaModel>
   in?: $Enums.AccountStatus[] | Prisma.ListEnumAccountStatusFieldRefInput<$PrismaModel>
@@ -478,6 +495,23 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeFilter<$PrismaModel>
+}
+
+export type NestedEnumPrayerNameFilter<$PrismaModel = never> = {
+  equals?: $Enums.PrayerName | Prisma.EnumPrayerNameFieldRefInput<$PrismaModel>
+  in?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPrayerNameFilter<$PrismaModel> | $Enums.PrayerName
+}
+
+export type NestedEnumPrayerNameWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PrayerName | Prisma.EnumPrayerNameFieldRefInput<$PrismaModel>
+  in?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PrayerName[] | Prisma.ListEnumPrayerNameFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPrayerNameWithAggregatesFilter<$PrismaModel> | $Enums.PrayerName
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPrayerNameFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPrayerNameFilter<$PrismaModel>
 }
 
 export type NestedEnumAccountStatusFilter<$PrismaModel = never> = {

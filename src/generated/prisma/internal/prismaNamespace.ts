@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Masjid: 'Masjid',
+  MasjidPrayerTime: 'MasjidPrayerTime',
   User: 'User'
 } as const
 
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "masjid" | "user"
+    modelProps: "masjid" | "masjidPrayerTime" | "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -489,6 +490,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MasjidCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MasjidCountAggregateOutputType> | number
+        }
+      }
+    }
+    MasjidPrayerTime: {
+      payload: Prisma.$MasjidPrayerTimePayload<ExtArgs>
+      fields: Prisma.MasjidPrayerTimeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MasjidPrayerTimeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MasjidPrayerTimeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>
+        }
+        findFirst: {
+          args: Prisma.MasjidPrayerTimeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MasjidPrayerTimeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>
+        }
+        findMany: {
+          args: Prisma.MasjidPrayerTimeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>[]
+        }
+        create: {
+          args: Prisma.MasjidPrayerTimeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>
+        }
+        createMany: {
+          args: Prisma.MasjidPrayerTimeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MasjidPrayerTimeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>[]
+        }
+        delete: {
+          args: Prisma.MasjidPrayerTimeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>
+        }
+        update: {
+          args: Prisma.MasjidPrayerTimeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>
+        }
+        deleteMany: {
+          args: Prisma.MasjidPrayerTimeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MasjidPrayerTimeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MasjidPrayerTimeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>[]
+        }
+        upsert: {
+          args: Prisma.MasjidPrayerTimeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MasjidPrayerTimePayload>
+        }
+        aggregate: {
+          args: Prisma.MasjidPrayerTimeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMasjidPrayerTime>
+        }
+        groupBy: {
+          args: Prisma.MasjidPrayerTimeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MasjidPrayerTimeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MasjidPrayerTimeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MasjidPrayerTimeCountAggregateOutputType> | number
         }
       }
     }
@@ -623,6 +698,19 @@ export const MasjidScalarFieldEnum = {
 export type MasjidScalarFieldEnum = (typeof MasjidScalarFieldEnum)[keyof typeof MasjidScalarFieldEnum]
 
 
+export const MasjidPrayerTimeScalarFieldEnum = {
+  id: 'id',
+  masjidId: 'masjidId',
+  date: 'date',
+  prayer: 'prayer',
+  jamaatTime: 'jamaatTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MasjidPrayerTimeScalarFieldEnum = (typeof MasjidPrayerTimeScalarFieldEnum)[keyof typeof MasjidPrayerTimeScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   authUid: 'authUid',
@@ -725,6 +813,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PrayerName'
+ */
+export type EnumPrayerNameFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrayerName'>
+    
+
+
+/**
+ * Reference to a field of type 'PrayerName[]'
+ */
+export type ListEnumPrayerNameFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrayerName[]'>
     
 
 
@@ -907,6 +1009,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   masjid?: Prisma.MasjidOmit
+  masjidPrayerTime?: Prisma.MasjidPrayerTimeOmit
   user?: Prisma.UserOmit
 }
 

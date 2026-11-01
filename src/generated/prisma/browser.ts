@@ -24,6 +24,11 @@ export * from './enums.js';
  */
 export type Masjid = Prisma.MasjidModel
 /**
+ * Model MasjidPrayerTime
+ * Admin-set Jamaah times per masjid per date. Window close is jamaat + 30 minutes in the service (KAN-28).
+ */
+export type MasjidPrayerTime = Prisma.MasjidPrayerTimeModel
+/**
  * Model User
  * Thin identity row for JWT verification (KAN-65). Full Part 6 profile lands with onboarding.
  */

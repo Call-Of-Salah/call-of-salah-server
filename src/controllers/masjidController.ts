@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import { NotFoundError } from '../common/errors.js';
 import { sendSuccess } from '../common/responses.js';
 import type { MasjidService } from '../common/services/index.js';
-import type { GetMasjidParams } from '../routes/masajid.schema.js';
+import type { GetMasjidParams, GetPrayerTimesQuery } from '../routes/masajid.schema.js';
 
 export interface MasjidControllerDeps {
   masjidService: MasjidService;
@@ -31,6 +31,14 @@ export function createMasjidController(deps: MasjidControllerDeps) {
         active: masjid.active,
         createdAt: masjid.createdAt.toISOString(),
       });
+    },
+
+    getPrayerTimes: async (
+      req: Request<GetMasjidParams, unknown, unknown, GetPrayerTimesQuery>,
+      res: Response,
+    ): Promise<void> => {
+      const result = await deps.masjidService.getPrayerTimes(req.params.masjidId, req.query.date);
+      sendSuccess(res, result);
     },
   };
 }

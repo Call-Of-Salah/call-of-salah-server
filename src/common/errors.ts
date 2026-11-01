@@ -46,8 +46,8 @@ export class ForbiddenError extends AppError {
 }
 
 export class NotFoundError extends AppError {
-  constructor(message = 'Not found') {
-    super(HttpStatus.NOT_FOUND, 'NOT_FOUND', message);
+  constructor(message = 'Not found', code = 'NOT_FOUND') {
+    super(HttpStatus.NOT_FOUND, code, message);
   }
 }
 
@@ -66,6 +66,12 @@ export class GoneError extends AppError {
 export class NotImplementedError extends AppError {
   constructor(message = 'Not implemented') {
     super(HttpStatus.NOT_IMPLEMENTED, 'NOT_IMPLEMENTED', message);
+  }
+}
+
+export class ServiceUnavailableError extends AppError {
+  constructor(code = 'SERVICE_UNAVAILABLE', message = 'Service unavailable') {
+    super(HttpStatus.SERVICE_UNAVAILABLE, code, message);
   }
 }
 

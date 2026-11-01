@@ -5,18 +5,25 @@ import { createApp } from '../app.js';
 import { SupabaseJwtVerifier } from '../common/auth/jwtVerifier.js';
 import { loadConfig } from '../common/config.js';
 import { IocKey, resetTestContainer } from '../common/ioc.js';
-import type { MasjidModel, UserModel } from '../generated/prisma/models.js';
+import type { MasjidModel, MasjidPrayerTimeModel, UserModel } from '../generated/prisma/models.js';
 import { createTestJwtKeys, signTestAccessToken, TEST_JWT_AUDIENCE, TEST_JWT_ISSUER } from './jwt.js';
-import { buildFakeUser, createMockMasjidRepository, createMockUserRepository } from './mocks/index.js';
+import {
+  buildFakeUser,
+  createMockMasjidPrayerTimeRepository,
+  createMockMasjidRepository,
+  createMockUserRepository,
+} from './mocks/index.js';
 
 export interface TestRepositories {
   userRepository: ReturnType<typeof createMockUserRepository>;
   masjidRepository: ReturnType<typeof createMockMasjidRepository>;
+  masjidPrayerTimeRepository: ReturnType<typeof createMockMasjidPrayerTimeRepository>;
 }
 
 export interface TestAppOptions {
   users?: UserModel[];
   masajid?: MasjidModel[];
+  prayerTimes?: MasjidPrayerTimeModel[];
   repositories?: Partial<TestRepositories>;
 }
 
@@ -42,6 +49,9 @@ export async function createTestApp(options: TestAppOptions = {}): Promise<TestA
     userRepository: options.repositories?.userRepository ?? createMockUserRepository(users),
     masjidRepository:
       options.repositories?.masjidRepository ?? createMockMasjidRepository(options.masajid),
+    masjidPrayerTimeRepository:
+      options.repositories?.masjidPrayerTimeRepository ??
+      createMockMasjidPrayerTimeRepository(options.prayerTimes),
   };
 
   resetTestContainer({
@@ -53,6 +63,7 @@ export async function createTestApp(options: TestAppOptions = {}): Promise<TestA
     }),
     [IocKey.UserRepository]: repositories.userRepository,
     [IocKey.MasjidRepository]: repositories.masjidRepository,
+    [IocKey.MasjidPrayerTimeRepository]: repositories.masjidPrayerTimeRepository,
     [IocKey.JwtVerifier]: new SupabaseJwtVerifier(keys.getKey, {
       issuer: TEST_JWT_ISSUER,
       audience: TEST_JWT_AUDIENCE,

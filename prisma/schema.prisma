@@ -23,6 +23,14 @@ enum UserRole {
   ADMIN
 }
 
+enum PrayerName {
+  FAJR
+  DHUHR
+  ASR
+  MAGHRIB
+  ISHA
+}
+
 /// admin_user_id is a bare UUID column (no FK yet) — admin_users doesn't exist in the
 /// schema yet. Wire up the relation once that table lands.
 model Masjid {
@@ -39,9 +47,27 @@ model Masjid {
   active               Boolean  @default(true)
   createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  users User[]
+  users       User[]
+  prayerTimes MasjidPrayerTime[]
 
   @@map("masajid")
+}
+
+/// Admin-set Jamaah times per masjid per date. Window close is jamaat + 30 minutes in the service (KAN-28).
+model MasjidPrayerTime {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  masjidId   String     @map("masjid_id") @db.Uuid
+  date       DateTime   @db.Date
+  prayer     PrayerName
+  jamaatTime DateTime   @map("jamaat_time") @db.Time(0)
+  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  masjid Masjid @relation(fields: [masjidId], references: [id])
+
+  @@unique([masjidId, date, prayer], map: "uq_prayer_time")
+  @@index([masjidId, date], map: "idx_prayer_times_lookup")
+  @@map("masjid_prayer_times")
 }
 
 /// Thin identity row for JWT verification (KAN-65). Full Part 6 profile lands with onboarding.
