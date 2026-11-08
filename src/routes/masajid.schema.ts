@@ -7,7 +7,7 @@ export const getMasjidParamsSchema = z.object({
 export type GetMasjidParams = z.infer<typeof getMasjidParamsSchema>;
 
 export const getPrayerTimesQuerySchema = z.object({
-  date: z.string().date().optional(),
+  date: z.iso.date().optional(),
 });
 
 export type GetPrayerTimesQuery = z.infer<typeof getPrayerTimesQuerySchema>;

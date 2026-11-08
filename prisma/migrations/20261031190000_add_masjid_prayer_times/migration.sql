@@ -15,9 +15,6 @@ CREATE TABLE "masjid_prayer_times" (
 );
 
 -- CreateIndex
-CREATE INDEX "idx_prayer_times_lookup" ON "masjid_prayer_times"("masjid_id", "date");
-
--- CreateIndex
 CREATE UNIQUE INDEX "uq_prayer_time" ON "masjid_prayer_times"("masjid_id", "date", "prayer");
 
 -- AddForeignKey

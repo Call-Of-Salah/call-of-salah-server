@@ -2,7 +2,8 @@ import type { PrayerName } from '../../generated/prisma/enums.js';
 import type { MasjidModel } from '../../generated/prisma/models.js';
 import { NotFoundError, ServiceUnavailableError } from '../errors.js';
 import type { MasjidPrayerTimeRepository, MasjidRepository } from '../repositories/interfaces/index.js';
-import { buildPrayerTimesPayload, todayYmdInTimeZone, type PrayerWindow } from './prayerWindow.js';
+import { todayYmdInTimeZone } from '../utils/dateTime.js';
+import { buildPrayerTimesPayload, type PrayerWindow } from './prayerWindow.js';
 
 export interface PrayerTimesResult {
   masjid_id: string;

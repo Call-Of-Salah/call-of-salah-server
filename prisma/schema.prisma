@@ -66,7 +66,6 @@ model MasjidPrayerTime {
   masjid Masjid @relation(fields: [masjidId], references: [id])
 
   @@unique([masjidId, date, prayer], map: "uq_prayer_time")
-  @@index([masjidId, date], map: "idx_prayer_times_lookup")
   @@map("masjid_prayer_times")
 }
 
