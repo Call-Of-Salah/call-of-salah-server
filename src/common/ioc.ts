@@ -4,8 +4,10 @@ import { PrismaClient } from '../generated/prisma/client.js';
 import { createRemoteSupabaseJwtVerifier, type JwtVerifier } from './auth/jwtVerifier.js';
 import { loadConfig, type AppConfig } from './config.js';
 import {
+  PrismaMasjidPrayerTimeRepository,
   PrismaMasjidRepository,
   PrismaUserRepository,
+  type MasjidPrayerTimeRepository,
   type MasjidRepository,
   type UserRepository,
 } from './repositories/index.js';
@@ -22,6 +24,7 @@ export const IocKey = {
   UserService: 'UserService',
   PrismaClient: 'PrismaClient',
   MasjidRepository: 'MasjidRepository',
+  MasjidPrayerTimeRepository: 'MasjidPrayerTimeRepository',
   MasjidService: 'MasjidService',
   JwtVerifier: 'JwtVerifier',
 } as const;
@@ -37,6 +40,7 @@ export interface IocRegistry {
   [IocKey.UserService]: UserService;
   [IocKey.PrismaClient]: PrismaClient;
   [IocKey.MasjidRepository]: MasjidRepository;
+  [IocKey.MasjidPrayerTimeRepository]: MasjidPrayerTimeRepository;
   [IocKey.MasjidService]: MasjidService;
   [IocKey.JwtVerifier]: JwtVerifier;
 }
@@ -104,10 +108,22 @@ export const iocGetMasjidRepository = ioc({
   factory: (): MasjidRepository => new PrismaMasjidRepository(iocGetPrismaClient()),
 });
 
+export const iocGetMasjidPrayerTimeRepository = ioc({
+  key: IocKey.MasjidPrayerTimeRepository,
+  mode: Mode.SINGLETON,
+  factory: (): MasjidPrayerTimeRepository =>
+    new PrismaMasjidPrayerTimeRepository(iocGetPrismaClient()),
+});
+
 export const iocGetMasjidService = ioc({
   key: IocKey.MasjidService,
   mode: Mode.SINGLETON,
-  factory: () => new MasjidService(iocGetMasjidRepository()),
+  factory: () =>
+    new MasjidService(
+      iocGetMasjidRepository(),
+      iocGetMasjidPrayerTimeRepository(),
+      iocGetConfig().prayerWindow,
+    ),
 });
 
 export const iocGetJwtVerifier = ioc({

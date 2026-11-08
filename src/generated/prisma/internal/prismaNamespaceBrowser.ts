@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Masjid: 'Masjid',
+  MasjidPrayerTime: 'MasjidPrayerTime',
   User: 'User'
 } as const
 
@@ -87,6 +88,19 @@ export const MasjidScalarFieldEnum = {
 } as const
 
 export type MasjidScalarFieldEnum = (typeof MasjidScalarFieldEnum)[keyof typeof MasjidScalarFieldEnum]
+
+
+export const MasjidPrayerTimeScalarFieldEnum = {
+  id: 'id',
+  masjidId: 'masjidId',
+  date: 'date',
+  prayer: 'prayer',
+  jamaatTime: 'jamaatTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MasjidPrayerTimeScalarFieldEnum = (typeof MasjidPrayerTimeScalarFieldEnum)[keyof typeof MasjidPrayerTimeScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

@@ -65,13 +65,17 @@ src/controllers/<name>Controller.ts    create<Name>Controller(deps) → handlers
 src/common/ioc.ts                      the container and every registration
 src/common/middlewares/                reusable RequestHandlers
 src/common/services/                   business logic, one class per service
+src/common/utils/                      pure helpers (dates, formatting). No I/O, no Prisma, no Express
 src/common/repositories/               storage implementations
 src/common/repositories/interfaces/    repository contracts and record shapes
 ```
 
 Filenames are camelCase. Folders with several implementations of one role carry an
-`index.ts` barrel — `repositories/`, `services/`, `repositories/interfaces/`. Folders
-whose files are imported by name (`routes/`, `controllers/`) do not need one.
+`index.ts` barrel — `repositories/`, `services/`, `repositories/interfaces/`, `utils/`.
+Folders whose files are imported by name (`routes/`, `controllers/`) do not need one.
+
+Helpers in `utils/` have no product policy. Window length, prayer order, and 404/503 stay in
+the service. Check-in should import `prayerWindow.ts` for the window, not re-derive it.
 
 Rules:
 
