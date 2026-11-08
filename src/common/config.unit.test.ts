@@ -21,6 +21,7 @@ describe('loadConfig', () => {
         jwtIssuer: 'http://127.0.0.1:54321/auth/v1',
         jwtAudience: 'authenticated',
       },
+      prayerWindow: { durationMinutes: 30, openOffsetMinutes: 0 },
     });
   });
 
@@ -32,6 +33,17 @@ describe('loadConfig', () => {
 
     expect(config.port).toBe(3000);
     expect(config.env).toBe('development');
+    expect(config.prayerWindow).toEqual({ durationMinutes: 30, openOffsetMinutes: 0 });
+  });
+
+  it('reads prayer window env when set', () => {
+    const config = loadConfig({
+      ...validEnv,
+      PRAYER_WINDOW_DURATION_MINUTES: '45',
+      PRAYER_WINDOW_OPEN_OFFSET_MINUTES: '10',
+    });
+
+    expect(config.prayerWindow).toEqual({ durationMinutes: 45, openOffsetMinutes: 10 });
   });
 
   it('strips a trailing slash on SUPABASE_URL', () => {

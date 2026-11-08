@@ -1,9 +1,10 @@
 import type { PrayerName } from '../../generated/prisma/enums.js';
 import type { MasjidModel } from '../../generated/prisma/models.js';
+import type { PrayerWindowConfig } from '../config.js';
 import { NotFoundError, ServiceUnavailableError } from '../errors.js';
 import type { MasjidPrayerTimeRepository, MasjidRepository } from '../repositories/interfaces/index.js';
 import { todayYmdInTimeZone } from '../utils/dateTime.js';
-import { buildPrayerTimesPayload, type PrayerWindow } from './prayerWindow.js';
+import { buildPrayerTimesPayload, DEFAULT_PRAYER_WINDOW, type PrayerWindow } from './prayerWindow.js';
 
 export interface PrayerTimesResult {
   masjid_id: string;
@@ -16,6 +17,7 @@ export class MasjidService {
   constructor(
     private readonly masajid: MasjidRepository,
     private readonly prayerTimes: MasjidPrayerTimeRepository,
+    private readonly window: PrayerWindowConfig = DEFAULT_PRAYER_WINDOW,
     private readonly clock: () => Date = () => new Date(),
   ) {}
 
@@ -31,7 +33,7 @@ export class MasjidService {
 
     const date = dateYmd ?? todayYmdInTimeZone(this.clock());
     const rows = await this.prayerTimes.findByMasjidAndDate(masjidId, date);
-    const { prayers, active_prayer } = buildPrayerTimesPayload(rows, date, this.clock());
+    const { prayers, active_prayer } = buildPrayerTimesPayload(rows, date, this.clock(), this.window);
 
     if (prayers.length === 0) {
       throw new ServiceUnavailableError(

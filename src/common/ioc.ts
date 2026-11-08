@@ -118,7 +118,12 @@ export const iocGetMasjidPrayerTimeRepository = ioc({
 export const iocGetMasjidService = ioc({
   key: IocKey.MasjidService,
   mode: Mode.SINGLETON,
-  factory: () => new MasjidService(iocGetMasjidRepository(), iocGetMasjidPrayerTimeRepository()),
+  factory: () =>
+    new MasjidService(
+      iocGetMasjidRepository(),
+      iocGetMasjidPrayerTimeRepository(),
+      iocGetConfig().prayerWindow,
+    ),
 });
 
 export const iocGetJwtVerifier = ioc({

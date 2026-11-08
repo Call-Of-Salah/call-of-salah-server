@@ -26,6 +26,20 @@ describe('prayerWindow', () => {
     expect(active_prayer).toBeNull();
   });
 
+  it('opens before jamaat when an offset is configured', () => {
+    const { prayers, active_prayer } = buildPrayerTimesPayload(
+      [{ prayer: 'DHUHR', jamaatTime: new Date(Date.UTC(1970, 0, 1, 14, 0, 0)) }],
+      '2026-07-15',
+      new Date('2026-07-15T12:55:00.000Z'),
+      { durationMinutes: 30, openOffsetMinutes: 10 },
+    );
+
+    expect(prayers).toEqual([
+      { prayer: 'DHUHR', jamaat_time: '14:00', window_open: '13:50', window_close: '14:30' },
+    ]);
+    expect(active_prayer).toBe('DHUHR');
+  });
+
   it('keeps an Isha window that crosses midnight on the same day', () => {
     const { prayers, active_prayer } = buildPrayerTimesPayload(
       [{ prayer: 'ISHA', jamaatTime: new Date(Date.UTC(1970, 0, 1, 23, 50, 0)) }],

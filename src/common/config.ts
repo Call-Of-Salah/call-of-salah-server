@@ -5,7 +5,15 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is not set'),
   SUPABASE_URL: z.string().min(1, 'SUPABASE_URL is not set'),
+  // Spec defaults: window opens at Jamaah and lasts 30 minutes (Part 5 / Part 7).
+  PRAYER_WINDOW_DURATION_MINUTES: z.coerce.number().int().positive().default(30),
+  PRAYER_WINDOW_OPEN_OFFSET_MINUTES: z.coerce.number().int().min(0).default(0),
 });
+
+export interface PrayerWindowConfig {
+  durationMinutes: number;
+  openOffsetMinutes: number;
+}
 
 export interface AppConfig {
   env: 'development' | 'test' | 'production';
@@ -19,6 +27,7 @@ export interface AppConfig {
     jwtIssuer: string;
     jwtAudience: 'authenticated';
   };
+  prayerWindow: PrayerWindowConfig;
 }
 
 /**
@@ -54,6 +63,10 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       jwksUrl: `${supabaseOrigin}/auth/v1/.well-known/jwks.json`,
       jwtIssuer: `${supabaseOrigin}/auth/v1`,
       jwtAudience: 'authenticated',
+    },
+    prayerWindow: {
+      durationMinutes: parsed.data.PRAYER_WINDOW_DURATION_MINUTES,
+      openOffsetMinutes: parsed.data.PRAYER_WINDOW_OPEN_OFFSET_MINUTES,
     },
   };
 }
