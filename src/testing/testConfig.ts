@@ -3,6 +3,7 @@ import type { CryptoKey } from 'jose';
 
 import { createApp } from '../app.js';
 import { SupabaseJwtVerifier } from '../common/auth/jwtVerifier.js';
+import { SupabaseIdentityProvider, type IdentityProvider } from '../common/auth/supabaseIdentityProvider.js';
 import { loadConfig } from '../common/config.js';
 import { IocKey, resetTestContainer } from '../common/ioc.js';
 import type { MasjidModel, UserModel } from '../generated/prisma/models.js';
@@ -18,6 +19,7 @@ export interface TestAppOptions {
   users?: UserModel[];
   masajid?: MasjidModel[];
   repositories?: Partial<TestRepositories>;
+  identityProvider?: IdentityProvider;
 }
 
 export interface TestApp {
@@ -57,9 +59,8 @@ export async function createTestApp(options: TestAppOptions = {}): Promise<TestA
     [IocKey.JwtVerifier]: new SupabaseJwtVerifier(
       keys.getKey,
       { issuer: TEST_JWT_ISSUER, audience: TEST_JWT_AUDIENCE },
-      'http://127.0.0.1:54321',
-      'test-publishable-key',
     ),
+    [IocKey.IdentityProvider]: options.identityProvider ?? new SupabaseIdentityProvider('http://127.0.0.1:54321', 'test-publishable-key'),
   });
 
   const signAccessToken = (

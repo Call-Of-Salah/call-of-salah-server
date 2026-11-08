@@ -5,12 +5,8 @@ export interface CreateUserInput {
   authUid: string;
   accountType: AccountType;
   status: AccountStatus;
-  firstName: string;
-  lastName: string;
-  username: string;
+  displayName: string;
   email: string;
-  dateOfBirth: Date;
-  phoneNumber?: string | null;
   masjidId: string;
 }
 

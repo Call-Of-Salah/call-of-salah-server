@@ -16,7 +16,7 @@ export function createAuthController(deps: AuthControllerDeps) {
 
       const user = await deps.userService.registerParent({ ...body, token });
 
-      sendSuccess(res, { user: { id: user.id, account_type: user.accountType, status: user.status } }, 201);
+      sendSuccess(res, { id: user.id, account_type: user.accountType, status: user.status }, 201);
     },
   };
 }

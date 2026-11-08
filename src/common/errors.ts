@@ -34,13 +34,13 @@ export class ValidationError extends AppError {
 }
 
 export class UnauthorizedError extends AppError {
-  constructor(code = 'UNAUTHORIZED', message = 'Unauthorized') {
+  constructor(code: string, message: string) {
     super(HttpStatus.UNAUTHORIZED, code, message);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(code = 'FORBIDDEN', message = 'Forbidden') {
+  constructor(code: string, message: string) {
     super(HttpStatus.FORBIDDEN, code, message);
   }
 }
@@ -52,13 +52,13 @@ export class NotFoundError extends AppError {
 }
 
 export class ConflictError extends AppError {
-  constructor(code = 'CONFLICT', message = 'Conflict') {
+  constructor(code: string, message: string) {
     super(HttpStatus.CONFLICT, code, message);
   }
 }
 
 export class GoneError extends AppError {
-  constructor(code = 'GONE', message = 'Gone') {
+  constructor(code: string, message: string) {
     super(HttpStatus.GONE, code, message);
   }
 }
@@ -72,5 +72,11 @@ export class NotImplementedError extends AppError {
 export class InternalServerError extends AppError {
   constructor(message = 'Internal server error') {
     super(HttpStatus.INTERNAL_SERVER_ERROR, 'INTERNAL_ERROR', message);
+  }
+}
+
+export class ServiceUnavailableError extends AppError {
+  constructor(code: string, message: string) {
+    super(HttpStatus.SERVICE_UNAVAILABLE, code, message);
   }
 }

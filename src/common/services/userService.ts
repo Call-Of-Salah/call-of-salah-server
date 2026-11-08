@@ -1,7 +1,8 @@
 import { AccountStatus, AccountType } from '../../generated/prisma/enums.js';
 import type { UserModel } from '../../generated/prisma/models.js';
 import type { JwtVerifier } from '../auth/jwtVerifier.js';
-import { ForbiddenError, UnauthorizedError, ValidationError } from '../errors.js';
+import { ForbiddenError, ServiceUnavailableError, UnauthorizedError, ValidationError } from '../errors.js';
+import type { IdentityProvider } from '../auth/supabaseIdentityProvider.js';
 import type { MasjidRepository, UserRepository } from '../repositories/interfaces/index.js';
 import type { RegisterParentBody } from '../../routes/auth.schema.js';
 
@@ -13,6 +14,7 @@ export class UserService {
   constructor(
     private readonly users: UserRepository,
     private readonly jwtVerifier: JwtVerifier,
+    private readonly identityProvider: IdentityProvider,
     private readonly masajid: MasjidRepository,
   ) {}
 
@@ -21,11 +23,21 @@ export class UserService {
   }
 
   async registerParent(input: RegisterParentInput): Promise<UserModel> {
-    let identity;
+    let claims;
     try {
-      identity = await this.jwtVerifier.getUser(input.token);
+      claims = await this.jwtVerifier.verify(input.token);
     } catch {
       throw new UnauthorizedError('INVALID_TOKEN', 'Supabase token invalid or expired');
+    }
+
+    let identity;
+    try {
+      identity = await this.identityProvider.getUser(input.token);
+    } catch (err) {
+      if (err instanceof Error && err.message === 'INVALID_TOKEN') {
+        throw new UnauthorizedError('INVALID_TOKEN', 'Supabase token invalid or expired');
+      }
+      throw new ServiceUnavailableError('IDENTITY_PROVIDER_UNAVAILABLE', 'Identity provider unavailable');
     }
 
     if (!identity.emailVerified) {
@@ -38,15 +50,11 @@ export class UserService {
     }
 
     return this.users.create({
-      authUid: identity.authUid,
+      authUid: claims.sub,
       accountType: AccountType.PARENT,
       status: AccountStatus.PENDING_ID_VERIFICATION,
-      firstName: input.first_name,
-      lastName: input.last_name,
-      username: input.username,
+      displayName: input.display_name,
       email: identity.email,
-      dateOfBirth: new Date(input.date_of_birth),
-      phoneNumber: input.phone_number ?? null,
       masjidId: input.masjid_id,
     });
   }

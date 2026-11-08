@@ -20,7 +20,11 @@ export class PrismaUserRepository implements UserRepository {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ConflictError('EMAIL_ALREADY_REGISTERED', 'A user with this auth UID already exists');
+          const target = Array.isArray(error.meta?.target) ? error.meta.target : [];
+          if (target.includes('username')) {
+            throw new ConflictError('USERNAME_TAKEN', 'Username is already taken');
+          }
+          throw new ConflictError('EMAIL_ALREADY_REGISTERED', 'Email is already registered');
         }
         if (error.code === 'P2003') {
           throw new ValidationError([{ path: 'masjid_id', message: 'Masjid not found' }]);

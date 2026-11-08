@@ -31,8 +31,8 @@ export function createV1Router(deps: V1RoutesDeps): Router {
     res.setHeader('Cache-Control', 'no-store');
     next();
   });
-  router.use(extractTokenFromHeaderMiddleware());
   router.use('/auth', createAuthRouter({ userService: deps.userService }));
+  router.use(extractTokenFromHeaderMiddleware());
   router.use(createRequireAuth({ jwtVerifier: deps.jwtVerifier, userRepository: deps.userRepository }));
   router.use('/users', createUserRouter());
   router.use('/masajid', createMasjidRouter({ masjidService: deps.masjidService }));

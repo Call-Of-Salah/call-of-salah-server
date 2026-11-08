@@ -2,6 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 
 import { PrismaClient } from '../generated/prisma/client.js';
 import { createRemoteSupabaseJwtVerifier, type JwtVerifier } from './auth/jwtVerifier.js';
+import { SupabaseIdentityProvider, type IdentityProvider } from './auth/supabaseIdentityProvider.js';
 import { loadConfig, type AppConfig } from './config.js';
 import {
   PrismaMasjidRepository,
@@ -24,6 +25,7 @@ export const IocKey = {
   MasjidRepository: 'MasjidRepository',
   MasjidService: 'MasjidService',
   JwtVerifier: 'JwtVerifier',
+  IdentityProvider: 'IdentityProvider',
 } as const;
 
 /**
@@ -39,6 +41,7 @@ export interface IocRegistry {
   [IocKey.MasjidRepository]: MasjidRepository;
   [IocKey.MasjidService]: MasjidService;
   [IocKey.JwtVerifier]: JwtVerifier;
+  [IocKey.IdentityProvider]: IdentityProvider;
 }
 
 interface Registration<Key extends keyof IocRegistry> {
@@ -78,7 +81,7 @@ export const iocGetUserRepository = ioc({
 export const iocGetUserService = ioc({
   key: IocKey.UserService,
   mode: Mode.SINGLETON,
-  factory: () => new UserService(iocGetUserRepository(), iocGetJwtVerifier(), iocGetMasjidRepository()),
+  factory: () => new UserService(iocGetUserRepository(), iocGetJwtVerifier(), iocGetIdentityProvider(), iocGetMasjidRepository()),
 });
 
 export const iocGetConfig = ioc({
@@ -114,6 +117,13 @@ export const iocGetJwtVerifier = ioc({
   key: IocKey.JwtVerifier,
   mode: Mode.SINGLETON,
   factory: (): JwtVerifier => createRemoteSupabaseJwtVerifier(iocGetConfig().supabase),
+});
+
+export const iocGetIdentityProvider = ioc({
+  key: IocKey.IdentityProvider,
+  mode: Mode.SINGLETON,
+  factory: (): IdentityProvider =>
+    new SupabaseIdentityProvider(iocGetConfig().supabase.url, iocGetConfig().supabase.publishableKey),
 });
 
 // ---------------------------------------------------------------------------
