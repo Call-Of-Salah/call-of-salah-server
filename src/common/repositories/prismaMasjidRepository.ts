@@ -8,4 +8,25 @@ export class PrismaMasjidRepository implements MasjidRepository {
   async findById(id: string): Promise<MasjidModel | null> {
     return this.prisma.masjid.findUnique({ where: { id } });
   }
+
+  async findActive(params: {
+    search?: string | undefined;
+  }): Promise<MasjidModel[]> {
+    const { search } = params;
+
+    return this.prisma.masjid.findMany({
+      where: {
+        active: true,
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { postcode: { contains: search, mode: 'insensitive' } },
+              ],
+            }
+          : {}),
+      },
+      orderBy: { name: 'asc' },
+    });
+  }
 }

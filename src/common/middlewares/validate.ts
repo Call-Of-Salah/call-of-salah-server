@@ -30,8 +30,12 @@ export function validateParams(schema: ZodType): RequestHandler {
   };
 }
 
+/**
+ * Validates the query string and stores the parsed values for the controller. Keeping
+ * parsed values matters for schemas that coerce query strings into numbers.
+ */
 export function validateQuery(schema: ZodType): RequestHandler {
-  return (req, _res, next) => {
+  return (req, res, next) => {
     const result = schema.safeParse(req.query);
 
     if (!result.success) {
@@ -46,19 +50,14 @@ export function validateQuery(schema: ZodType): RequestHandler {
       return;
     }
 
+    res.locals['validatedQuery'] = result.data;
     next();
   };
 }
 
 /**
  * Stashes the response schema on `res.locals` for `sendSuccess` to check the controller's
- * `body` against before it goes out. Deliberately doesn't touch `res.json` itself — the
- * terminal error handler calls that directly with a differently-shaped envelope, and
- * patching it here would run that through this schema too.
- *
- * Lives in the route chain like `validateParams`, so the controller itself stays a plain
- * `sendSuccess(res, payload)` with no explicit validation call to remember:
- * `router.get(path, validateParams(schema), validateResponse(responseSchema), controller.handler)`.
+ * body before it goes out. The error handler sends its own differently-shaped envelope.
  */
 export function validateResponse(schema: ZodType): RequestHandler {
   return (_req, res, next) => {

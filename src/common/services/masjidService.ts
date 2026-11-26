@@ -13,6 +13,13 @@ export interface PrayerTimesResult {
   active_prayer: PrayerName | null;
 }
 
+export interface MasjidListResult {
+  masjid: MasjidModel;
+  distanceMiles?: number;
+}
+
+const EARTH_RADIUS_MILES = 3958.7613;
+
 export class MasjidService {
   constructor(
     private readonly masajid: MasjidRepository,
@@ -44,4 +51,56 @@ export class MasjidService {
 
     return { masjid_id: masjidId, date, prayers, active_prayer };
   }
+
+  async listMasajid(params: {
+    search?: string | undefined;
+    latitude?: number | undefined;
+    longitude?: number | undefined;
+  }): Promise<MasjidListResult[]> {
+    const masajid = await this.masajid.findActive({ search: params.search });
+    const { latitude, longitude } = params;
+
+    if (latitude === undefined || longitude === undefined) {
+      return masajid.map((masjid) => ({ masjid }));
+    }
+
+    return masajid
+      .map((masjid) => ({
+        masjid,
+        distanceMiles: distanceInMiles(
+          latitude,
+          longitude,
+          masjid.latitude,
+          masjid.longitude,
+        ),
+      }))
+      .sort((a, b) => a.distanceMiles - b.distanceMiles)
+      .map(({ masjid, distanceMiles }) => ({
+        masjid,
+        distanceMiles: Math.round(distanceMiles * 100) / 100,
+      }));
+  }
+}
+
+function distanceInMiles(
+  latitude1: number,
+  longitude1: number,
+  latitude2: number,
+  longitude2: number,
+): number {
+  const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
+  const latitudeDifference = toRadians(latitude2 - latitude1);
+  const longitudeDifference = toRadians(longitude2 - longitude1);
+
+  const haversine =
+    Math.sin(latitudeDifference / 2) ** 2 +
+    Math.cos(toRadians(latitude1)) *
+      Math.cos(toRadians(latitude2)) *
+      Math.sin(longitudeDifference / 2) ** 2;
+
+  return (
+    2 *
+    EARTH_RADIUS_MILES *
+    Math.asin(Math.sqrt(Math.min(1, haversine)))
+  );
 }

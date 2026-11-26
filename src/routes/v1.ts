@@ -28,8 +28,12 @@ export function createV1Router(deps: V1RoutesDeps): Router {
     res.setHeader('Cache-Control', 'no-store');
     next();
   });
-  router.use(createRequireAuth({ jwtVerifier: deps.jwtVerifier, userRepository: deps.userRepository }));
+  const requireAuth = createRequireAuth({
+    jwtVerifier: deps.jwtVerifier,
+    userRepository: deps.userRepository,
+  });
+  router.use('/masajid', createMasjidRouter(deps));
+  router.use(requireAuth);
   router.use('/users', createUserRouter());
-  router.use('/masajid', createMasjidRouter({ masjidService: deps.masjidService }));
   return router;
 }
