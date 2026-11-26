@@ -9,6 +9,38 @@ export interface RequireAuthDeps {
   userRepository: UserRepository;
 }
 
+export interface RequireJwtDeps {
+  jwtVerifier: JwtVerifier;
+}
+
+/** Verifies the Supabase JWT without requiring a local app-user row. */
+export function createRequireJwt(deps: RequireJwtDeps): RequestHandler {
+  return async (req, _res, next) => {
+    const header = req.headers.authorization;
+    if (typeof header !== 'string' || !header.startsWith('Bearer ')) {
+      next(new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header'));
+      return;
+    }
+
+    const token = header.slice('Bearer '.length).trim();
+    if (token.length === 0) {
+      next(new UnauthorizedError('NO_TOKEN', 'Missing or invalid Authorization header'));
+      return;
+    }
+
+    let sub: string;
+    try {
+      ({ sub } = await deps.jwtVerifier.verify(token));
+    } catch {
+      next(new UnauthorizedError('INVALID_TOKEN', 'Supabase token invalid or expired'));
+      return;
+    }
+
+    req.authUid = sub;
+    next();
+  };
+}
+
 export function createRequireAuth(deps: RequireAuthDeps): RequestHandler {
   return async (req, _res, next) => {
     try {

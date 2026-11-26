@@ -41,4 +41,33 @@ export const masjidResponseSchema = z.object({
   createdAt: z.string(),
 });
 
+export const masjidListItemResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  addressLine1: z.string(),
+  addressLine2: z.string().nullable(),
+  city: z.string(),
+  postcode: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
+  distanceMiles: z.number().nonnegative().optional(),
+});
+
+export const masjidListResponseSchema = z.array(masjidListItemResponseSchema);
+
+export const listMasajidQuerySchema = z.object({
+  search: z.string().trim().min(1).max(100).optional(),
+  latitude: z.coerce.number().min(-90).max(90).optional(),
+  longitude: z.coerce.number().min(-180).max(180).optional(),
+}).refine(
+  ({ latitude, longitude }) =>
+    (latitude === undefined) === (longitude === undefined),
+  {
+    message: 'Latitude and longitude must be provided together',
+    path: ['latitude'],
+  },
+);
+
+export type ListMasajidQuery = z.infer<typeof listMasajidQuerySchema>;
+
 export type MasjidResponse = z.infer<typeof masjidResponseSchema>;

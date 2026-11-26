@@ -2,7 +2,9 @@ import { vi } from 'vitest';
 
 import type { MasjidModel } from '../../generated/prisma/models.js';
 
-export function buildFakeMasjid(overrides: Partial<MasjidModel> = {}): MasjidModel {
+export function buildFakeMasjid(
+  overrides: Partial<MasjidModel> = {},
+): MasjidModel {
   return {
     id: '11111111-1111-4111-8111-111111111111',
     name: 'Test Masjid',
@@ -24,6 +26,26 @@ export function createMockMasjidRepository(seed: MasjidModel[] = []) {
   const rows = new Map(seed.map((row) => [row.id, row]));
 
   return {
-    findById: vi.fn(async (id: string): Promise<MasjidModel | null> => rows.get(id) ?? null),
+    findById: vi.fn(
+      async (id: string): Promise<MasjidModel | null> => rows.get(id) ?? null,
+    ),
+
+    findActive: vi.fn(
+      async (params: {
+        search?: string | undefined;
+      }): Promise<MasjidModel[]> => {
+        const search = params.search?.toLowerCase();
+
+        return [...rows.values()].filter((row) => {
+          if (!row.active) return false;
+          if (!search) return true;
+
+          return (
+            row.name.toLowerCase().includes(search) ||
+            row.postcode.toLowerCase().includes(search)
+          );
+        });
+      },
+    ),
   };
 }
